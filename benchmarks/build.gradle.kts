@@ -23,7 +23,7 @@ plugins {
 }
 
 repositories {
-    maven("https://oss.jfrog.org/oss-snapshot-local")
+    maven("https://repo.spring.io/libs-snapshot")
 }
 
 val rsocketJavaVersion: String by rootProject
