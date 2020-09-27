@@ -57,7 +57,7 @@ allprojects {
 
 subprojects {
     tasks.withType<Test> {
-        jvmArgs("-Xmx1g", "-XX:+UseParallelGC")
+        jvmArgs("-Xmx4g", "-XX:+UseParallelGC")
     }
 
     plugins.withId("org.jetbrains.kotlin.multiplatform") {
