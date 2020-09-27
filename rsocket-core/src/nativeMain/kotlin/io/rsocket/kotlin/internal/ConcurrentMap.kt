@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package io.rsocket.kotlin.test
+package io.rsocket.kotlin.internal
 
-import io.rsocket.kotlin.logging.*
-import kotlinx.coroutines.*
+import co.touchlab.stately.collections.*
 
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
-
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
-
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+internal actual fun <V> concurrentMap(): MutableMap<Int, V> = sharedMutableMapOf()

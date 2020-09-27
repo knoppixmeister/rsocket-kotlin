@@ -18,6 +18,7 @@ import com.jfrog.bintray.gradle.*
 import com.jfrog.bintray.gradle.tasks.*
 import org.gradle.api.publish.maven.internal.artifact.*
 import org.jetbrains.kotlin.gradle.dsl.*
+import org.jetbrains.kotlin.gradle.plugin.mpp.*
 import org.jetbrains.kotlin.gradle.targets.js.*
 import org.jetbrains.kotlin.gradle.targets.jvm.*
 import org.jfrog.gradle.plugin.artifactory.dsl.*
@@ -86,6 +87,15 @@ subprojects {
                     is KotlinJvmTarget -> {
                         compilations.all {
                             kotlinOptions { jvmTarget = "1.6" }
+                        }
+                    }
+                    is KotlinNativeTargetWithTests<*> -> {
+                        //run tests on release + mimalloc to reduce tests execution time
+                        //compilation is slower in that mode, so for local dev it's better to comment it
+                        binaries.test(listOf(RELEASE))
+                        testRuns.all { setExecutionSourceFrom(binaries.getTest(RELEASE)) }
+                        compilations.all {
+                            kotlinOptions.freeCompilerArgs += "-Xallocator=mimalloc"
                         }
                     }
                 }

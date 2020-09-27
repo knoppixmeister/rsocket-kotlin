@@ -27,6 +27,8 @@ val ktorVersion: String by rootProject
 kotlin {
     jvm()
     js()
+    //no ktor engine yet supports websockets on client, but if it will be supported, it should work out of the box
+    linuxX64("native")
 
     sourceSets {
         val commonMain by getting {

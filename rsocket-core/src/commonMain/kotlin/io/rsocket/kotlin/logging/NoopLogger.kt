@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package io.rsocket.kotlin.test
+package io.rsocket.kotlin.logging
 
-import io.rsocket.kotlin.logging.*
-import kotlinx.coroutines.*
-
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
-
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
-
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+/**
+ * Logger implementation, that never print
+ */
+object NoopLogger : Logger, LoggerFactory {
+    override val tag: String get() = "noop"
+    override fun isLoggable(level: LoggingLevel): Boolean = false
+    override fun rawLog(level: LoggingLevel, throwable: Throwable?, message: Any?): Unit = Unit
+    override fun logger(tag: String): Logger = this
+}

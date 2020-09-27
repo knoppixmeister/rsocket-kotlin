@@ -25,21 +25,31 @@ plugins {
 
 val ktorVersion: String by rootProject
 val kotlinxCoroutinesVersion: String by rootProject
+val statelyVersion: String by rootProject
 
 kotlin {
     jvm()
     js()
+    linuxX64("native")
 
     sourceSets {
         val commonMain by getting {
             dependencies {
                 api("io.ktor:ktor-io:$ktorVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion") {
+                    version { strictly(kotlinxCoroutinesVersion) }
+                }
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(project(":rsocket-transport-local"))
+            }
+        }
+        val nativeMain by getting {
+            dependencies {
+                //synchronized collections implementation
+                api("co.touchlab:stately-iso-collections:$statelyVersion")
             }
         }
     }

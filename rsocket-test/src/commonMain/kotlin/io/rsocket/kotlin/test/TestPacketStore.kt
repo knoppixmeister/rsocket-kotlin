@@ -16,15 +16,9 @@
 
 package io.rsocket.kotlin.test
 
-import io.rsocket.kotlin.logging.*
-import kotlinx.coroutines.*
+import io.ktor.utils.io.core.*
 
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
-
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
-
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+expect class TestPacketStore() {
+    val stored: List<ByteReadPacket>
+    fun store(packet: ByteReadPacket)
+}

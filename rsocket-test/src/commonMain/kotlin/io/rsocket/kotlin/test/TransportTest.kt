@@ -20,6 +20,7 @@ import io.ktor.utils.io.core.*
 import io.rsocket.kotlin.*
 import io.rsocket.kotlin.core.*
 import io.rsocket.kotlin.keepalive.*
+import io.rsocket.kotlin.logging.*
 import io.rsocket.kotlin.payload.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -167,8 +168,8 @@ abstract class TransportTest : SuspendTest {
     companion object {
 
         val ACCEPTOR: RSocketAcceptor = { TestRSocket() }
-        val CONNECTOR_CONFIG = RSocketConnectorConfiguration(keepAlive = KeepAlive(10.minutes, 100.minutes))
-        val SERVER_CONFIG = RSocketServerConfiguration()
+        val CONNECTOR_CONFIG = RSocketConnectorConfiguration(keepAlive = KeepAlive(10.minutes, 100.minutes), loggerFactory = NoopLogger)
+        val SERVER_CONFIG = RSocketServerConfiguration(loggerFactory = NoopLogger)
 
         val MOCK_DATA: String = "test-data"
         val MOCK_METADATA: String = "metadata"

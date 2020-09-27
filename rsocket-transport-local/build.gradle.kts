@@ -25,6 +25,7 @@ plugins {
 kotlin {
     jvm()
     js()
+    linuxX64("native")
 
     sourceSets {
         val commonMain by getting {

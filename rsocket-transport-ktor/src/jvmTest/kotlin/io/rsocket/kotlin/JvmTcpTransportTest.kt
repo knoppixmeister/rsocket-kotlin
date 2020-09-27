@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package io.rsocket.kotlin.test
+package io.rsocket.kotlin
 
-import io.rsocket.kotlin.logging.*
+import io.ktor.network.selector.*
 import kotlinx.coroutines.*
 
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
+class JvmTcpTransportTest : TcpTransportTest() {
+    override val clientSelector: SelectorManager get() = selector
+    override val serverSelector: SelectorManager get() = selector
 
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
-
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+    companion object {
+        private val selector = SelectorManager(Dispatchers.IO)
+    }
+}

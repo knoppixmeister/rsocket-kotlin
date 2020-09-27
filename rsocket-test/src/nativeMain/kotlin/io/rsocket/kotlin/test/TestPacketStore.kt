@@ -16,15 +16,21 @@
 
 package io.rsocket.kotlin.test
 
-import io.rsocket.kotlin.logging.*
-import kotlinx.coroutines.*
+import io.ktor.utils.io.core.*
+import kotlinx.atomicfu.*
 
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
+actual class TestPacketStore {
+    private val sentIndex = atomic(0)
+    private val _stored = atomicArrayOfNulls<ByteReadPacket>(100) //max 100 in cache
 
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
+    actual val stored: List<ByteReadPacket>
+        get() = buildList {
+            repeat(sentIndex.value) {
+                add(_stored[it].value!!)
+            }
+        }
 
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+    actual fun store(packet: ByteReadPacket) {
+        _stored[sentIndex.getAndIncrement()].value = packet
+    }
+}

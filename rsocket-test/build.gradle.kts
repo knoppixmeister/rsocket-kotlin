@@ -25,6 +25,7 @@ val turbineVersion: String by rootProject
 kotlin {
     jvm()
     js()
+    linuxX64("native")
 
     sourceSets {
         val commonMain by getting {
@@ -33,7 +34,9 @@ kotlin {
                 api(kotlin("test-common"))
                 api(kotlin("test-annotations-common"))
 
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion") {
+                    version { strictly(kotlinxCoroutinesVersion) }
+                }
                 api("io.ktor:ktor-utils:$ktorVersion")
                 api("app.cash.turbine:turbine:$turbineVersion")
             }

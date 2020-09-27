@@ -16,6 +16,7 @@
 
 plugins {
     kotlin("multiplatform")
+    id("kotlinx-atomicfu")
 
     id("maven-publish")
     id("com.jfrog.bintray")
@@ -27,6 +28,7 @@ val ktorVersion: String by rootProject
 kotlin {
     jvm()
     js()
+    linuxX64("native")
 
     sourceSets {
         val commonMain by getting {

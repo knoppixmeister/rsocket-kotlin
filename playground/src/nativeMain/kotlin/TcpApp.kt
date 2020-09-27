@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package io.rsocket.kotlin.test
-
-import io.rsocket.kotlin.logging.*
+import io.ktor.util.*
 import kotlinx.coroutines.*
+import kotlin.coroutines.*
 
-internal actual fun runTest(
-    ignoreNative: Boolean,
-    block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
+@OptIn(InternalAPI::class)
+fun main() {
+    runBlocking {
+        runTcpClient(EmptyCoroutineContext)
+//        runTcpServer(EmptyCoroutineContext)
+    }
+}
 
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
-
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger

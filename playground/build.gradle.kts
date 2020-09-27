@@ -27,6 +27,13 @@ kotlin {
             binaries.executable()
         }
     }
+    linuxX64("native") {
+        binaries {
+            executable {
+                entryPoint = "main"
+            }
+        }
+    }
 
     sourceSets {
         val commonMain by getting {

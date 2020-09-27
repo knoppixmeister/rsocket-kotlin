@@ -22,9 +22,13 @@ import kotlinx.coroutines.*
 internal actual fun runTest(
     ignoreNative: Boolean,
     block: suspend CoroutineScope.() -> Unit,
-): dynamic = GlobalScope.promise(block = block)
+) {
+    if (ignoreNative) return
 
-//JS is single threaded, so it have only one dispatcher backed by one threed
-actual val anotherDispatcher: CoroutineDispatcher get() = Dispatchers.Default
+    runBlocking(block = block)
+}
 
-actual val TestLoggerFactory: LoggerFactory = ConsoleLogger
+actual val anotherDispatcher: CoroutineDispatcher get() = newSingleThreadContext("another")
+
+@SharedImmutable
+actual val TestLoggerFactory: LoggerFactory = PrintLogger
