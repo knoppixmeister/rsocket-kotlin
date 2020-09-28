@@ -26,7 +26,7 @@ jobs:
           java-version: 11
       - uses: eskatos/gradle-command-action@v1
         with:
-          arguments: build --info
+          arguments: build --info --scan --no-daemon
 
   publish:
     needs: build
@@ -52,4 +52,4 @@ jobs:
           githubRef: ${{ github.ref }}
           buildNumber: ${{ github.run_number }}
         with:
-          arguments: -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" -PversionSuffix="-${githubRef#refs/heads/}-SNAPSHOT" -PbuildNumber="${buildNumber}" artifactoryPublish --stacktrace
+          arguments: -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" -PversionSuffix="-${githubRef#refs/heads/}-SNAPSHOT" -PbuildNumber="${buildNumber}" artifactoryPublish --stacktrace --no-daemon
