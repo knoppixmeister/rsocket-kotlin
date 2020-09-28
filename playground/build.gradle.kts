@@ -30,7 +30,7 @@ kotlin {
     val os = System.getProperty("os.name")
     when {
         os == "Linux"            -> linuxX64("native")
-        os.startsWith("Windows") -> mingwX64("native")
+//        os.startsWith("Windows") -> mingwX64("native") //no native support for TCP
         os.startsWith("Mac")     -> macosX64("native")
         else                     -> null
     }?.binaries {

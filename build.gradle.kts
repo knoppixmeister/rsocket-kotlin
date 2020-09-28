@@ -55,12 +55,7 @@ allprojects {
 
 val idea = System.getProperty("idea.active") == "true"
 
-val os = System.getProperty("os.name")
-val linux = os == "Linux"
-val mac = os.startsWith("Mac")
-val win = os.startsWith("Windows")
-
-val isMainHost = true //System.getProperty("isMainHost") == "true"
+val isMainHost = System.getProperty("isMainHost") == "true"
 
 val Project.publicationNames: Array<String>
     get() {
@@ -114,38 +109,25 @@ subprojects {
                 }
             }
 
-            //windows target isn't supported by ktor-network
-            if (win && (project.name == "rsocket-transport-ktor" || project.name == "rsocket-transport-ktor-client")) return@configure
-
             //native targets configuration
             if (idea) {
-                //if idea, use only one native target same as host
+                //if using idea, use only one native target same as host, DON'T PUBLISH FROM IDEA!!!
+                val os = System.getProperty("os.name")
                 when {
-                    linux -> linuxX64("native")
-                    win   -> mingwX64("native")
-                    mac   -> macosX64("native")
+                    os == "Linux"            -> linuxX64("native")
+                    os.startsWith("Windows") -> mingwX64("native")
+                    os.startsWith("Mac")     -> macosX64("native")
                 }
             } else {
-                val nativeTargets = when {
-                    linux -> listOf(linuxX64())
-                    win   -> listOf(mingwX64())
-                    mac   -> {
-                        listOf(
-                            macosX64(),
-                            iosArm32(),
-                            iosArm64(),
-                            iosX64(),
-                            watchosArm32(),
-                            watchosArm64(),
-                            watchosX86(),
-                            tvosArm64(),
-                            tvosX64()
-                        )
-                    }
-                    else  -> emptyList()
-                }
+                val nativeTargets = mutableListOf(
+                    linuxX64(), macosX64(),
+                    iosArm32(), iosArm64(), iosX64(),
+                    watchosArm32(), watchosArm64(), watchosX86(),
+                    tvosArm64(), tvosX64()
+                )
 
-                if (nativeTargets.isEmpty()) return@configure
+                //windows target isn't supported by ktor-network
+                if (project.name != "rsocket-transport-ktor" && project.name != "rsocket-transport-ktor-client") nativeTargets += mingwX64()
 
                 val nativeMain by sourceSets.creating
                 val nativeTest by sourceSets.creating
