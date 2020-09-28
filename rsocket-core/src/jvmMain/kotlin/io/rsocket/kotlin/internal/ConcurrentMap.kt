@@ -18,4 +18,4 @@ package io.rsocket.kotlin.internal
 
 import java.util.concurrent.*
 
-internal actual fun <V> concurrentMap(): MutableMap<Int, V> = ConcurrentHashMap()
+internal actual fun <V : Any> concurrentMap(): MutableMap<Int, V> = ConcurrentHashMap()

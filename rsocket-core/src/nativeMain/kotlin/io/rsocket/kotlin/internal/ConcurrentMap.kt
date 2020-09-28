@@ -16,6 +16,8 @@
 
 package io.rsocket.kotlin.internal
 
-import co.touchlab.stately.collections.*
+import io.ktor.util.*
+import io.ktor.util.collections.*
 
-internal actual fun <V> concurrentMap(): MutableMap<Int, V> = sharedMutableMapOf()
+@OptIn(InternalAPI::class)
+internal actual fun <V : Any> concurrentMap(): MutableMap<Int, V> = ConcurrentMap()

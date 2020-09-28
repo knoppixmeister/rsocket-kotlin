@@ -64,7 +64,7 @@ val Project.publicationNames: Array<String>
         //publish js, jvm, metadata and kotlinMultiplatform only once
         return when {
             isMainHost -> all
-            else       -> all - "js" - "jvm" - "metadata" - "kotlinMultiplatform"
+            else       -> all - "js" - "jvm" - "metadata" - "kotlinMultiplatform" - "linuxX64"
         }.toTypedArray()
     }
 
@@ -129,8 +129,12 @@ subprojects {
                 //windows target isn't supported by ktor-network
                 if (project.name != "rsocket-transport-ktor" && project.name != "rsocket-transport-ktor-client") nativeTargets += mingwX64()
 
-                val nativeMain by sourceSets.creating
-                val nativeTest by sourceSets.creating
+                val nativeMain by sourceSets.creating {
+                    dependsOn(sourceSets["commonMain"])
+                }
+                val nativeTest by sourceSets.creating {
+                    dependsOn(sourceSets["commonTest"])
+                }
 
                 nativeTargets.forEach {
                     sourceSets["${it.name}Main"].dependsOn(nativeMain)

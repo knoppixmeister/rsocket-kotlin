@@ -16,4 +16,4 @@
 
 package io.rsocket.kotlin.internal
 
-internal expect fun <V> concurrentMap(): MutableMap<Int, V>
+internal expect fun <V : Any> concurrentMap(): MutableMap<Int, V>

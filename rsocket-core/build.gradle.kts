@@ -25,7 +25,6 @@ plugins {
 
 val ktorVersion: String by rootProject
 val kotlinxCoroutinesVersion: String by rootProject
-val statelyVersion: String by rootProject
 
 kotlin {
     sourceSets {
@@ -44,8 +43,8 @@ kotlin {
         }
         val nativeMain by getting {
             dependencies {
-                //synchronized collections implementation
-                api("co.touchlab:stately-iso-collections:$statelyVersion")
+                //TODO - for concurrent map, but it's internal, need to replace it
+                api("io.ktor:ktor-utils:$ktorVersion")
             }
         }
     }
