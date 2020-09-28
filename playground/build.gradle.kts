@@ -27,7 +27,7 @@ kotlin {
             binaries.executable()
         }
     }
-    linuxX64("native") {
+    iosX64("native") {
         binaries {
             executable {
                 entryPoint = "main"

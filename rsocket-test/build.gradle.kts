@@ -25,7 +25,7 @@ val turbineVersion: String by rootProject
 kotlin {
     jvm()
     js()
-    linuxX64("native")
+    iosX64("native")
 
     sourceSets {
         val commonMain by getting {

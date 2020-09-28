@@ -27,10 +27,10 @@ import io.ktor.server.cio.CIO as ServerCIO
 
 class CIOWebSocketTransportTest : WebSocketTransportTest(ClientCIO, ServerCIO)
 
-class OkHttpClientWebSocketTransportTest : WebSocketTransportTest(OkHttp, ServerCIO)
+//class OkHttpClientWebSocketTransportTest : WebSocketTransportTest(OkHttp, ServerCIO)
 
-class NettyServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Netty)
+//class NettyServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Netty)
 
-class JettyServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Jetty)
+//class JettyServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Jetty)
 
-class TomcatServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Tomcat)
+//class TomcatServerWebSocketTransportTest : WebSocketTransportTest(ClientCIO, Tomcat)
