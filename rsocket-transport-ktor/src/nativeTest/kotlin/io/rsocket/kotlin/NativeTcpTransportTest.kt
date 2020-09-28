@@ -20,7 +20,7 @@ import io.ktor.network.selector.*
 import kotlin.time.*
 
 class NativeTcpTransportTest : TcpTransportTest() {
-    override val testTimeout: Duration = 30.minutes //big tests are very long
+    override val testTimeout: Duration = 40.minutes //big tests are very long
     override val clientSelector: SelectorManager get() = selectorClient
     override val serverSelector: SelectorManager get() = selectorServer
 

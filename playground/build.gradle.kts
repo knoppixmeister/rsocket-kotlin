@@ -27,11 +27,15 @@ kotlin {
             binaries.executable()
         }
     }
-    iosX64("native") {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
+    val os = System.getProperty("os.name")
+    when {
+        os == "Linux"            -> linuxX64("native")
+        os.startsWith("Windows") -> mingwX64("native")
+        os.startsWith("Mac")     -> macosX64("native")
+        else                     -> null
+    }?.binaries {
+        executable {
+            entryPoint = "main"
         }
     }
 

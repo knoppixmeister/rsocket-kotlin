@@ -23,10 +23,6 @@ plugins {
 }
 
 kotlin {
-    jvm()
-    js()
-    iosX64("native")
-
     sourceSets {
         val commonMain by getting {
             dependencies {

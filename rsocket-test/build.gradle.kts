@@ -23,10 +23,6 @@ val kotlinxCoroutinesVersion: String by rootProject
 val turbineVersion: String by rootProject
 
 kotlin {
-    jvm()
-    js()
-    iosX64("native")
-
     sourceSets {
         val commonMain by getting {
             dependencies {
