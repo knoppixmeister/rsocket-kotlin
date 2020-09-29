@@ -36,7 +36,7 @@ jobs:
         env:
           isMainHost: ${{ matrix.isMainHost }}
         with:
-          arguments: build --scan --no-daemon
+          arguments: -PisMainHost="${isMainHost}" build --scan --no-daemon
 
   publish:
     needs: build
@@ -74,4 +74,4 @@ jobs:
           bintrayKey: ${{ secrets.bintrayKey }}
           buildNumber: ${{ github.run_number }}
         with:
-          arguments: -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" -PversionSuffix="-${BRANCH_NAME}-SNAPSHOT" -PbuildNumber="${buildNumber}" artifactoryPublish --stacktrace --no-daemon
+          arguments: -PisMainHost="${isMainHost}" -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" -PversionSuffix="-${BRANCH_NAME}-SNAPSHOT" -PbuildNumber="${buildNumber}" artifactoryPublish --stacktrace --no-daemon
