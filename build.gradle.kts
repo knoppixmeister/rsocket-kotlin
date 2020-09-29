@@ -129,9 +129,9 @@ subprojects {
                     listOf(linuxX64(), macosX64()) + if (supportMingw) listOf(mingwX64()) else emptyList()
 
                 val nativeTargets = hostTargets + listOf(
-                    iosArm32(), iosArm64(), iosX64()
-//                    watchosArm32(), watchosArm64(), watchosX86(),
-//                    tvosArm64(), tvosX64()
+                    iosArm32(), iosArm64(), iosX64(),
+                    watchosArm32(), watchosArm64(), watchosX86(),
+                    tvosArm64(), tvosX64()
                 )
 
                 val nativeMain by sourceSets.creating {
