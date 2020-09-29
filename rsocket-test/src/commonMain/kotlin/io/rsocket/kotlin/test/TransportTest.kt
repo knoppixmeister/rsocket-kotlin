@@ -29,7 +29,7 @@ import kotlin.time.*
 
 @OptIn(ExperimentalTime::class)
 abstract class TransportTest : SuspendTest {
-    override val testTimeout: Duration = 10.minutes
+    override val testTimeout: Duration = 20.minutes
 
     lateinit var client: RSocket //should be assigned in `before`
 
