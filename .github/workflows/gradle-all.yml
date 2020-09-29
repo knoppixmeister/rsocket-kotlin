@@ -33,6 +33,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.*') }} #hash based on *.gradle.kts and *.gradle.properties
           restore-keys: ${{ runner.os }}-gradle
       - uses: eskatos/gradle-command-action@v1
+        env:
+          isMainHost: ${{ matrix.isMainHost }}
         with:
           arguments: build --scan --no-daemon
 
@@ -63,6 +65,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - uses: eskatos/gradle-command-action@v1
         env:
+          isMainHost: ${{ matrix.isMainHost }}
           bintrayUser: ${{ secrets.bintrayUser }}
           bintrayKey: ${{ secrets.bintrayKey }}
           githubRef: ${{ github.ref }}

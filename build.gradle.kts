@@ -19,6 +19,7 @@ import com.jfrog.bintray.gradle.tasks.*
 import org.gradle.api.publish.maven.internal.artifact.*
 import org.jetbrains.kotlin.gradle.dsl.*
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
+import org.jetbrains.kotlin.konan.target.*
 import org.jfrog.gradle.plugin.artifactory.dsl.*
 
 buildscript {
@@ -109,25 +110,26 @@ subprojects {
                 }
             }
 
+            //windows target isn't supported by ktor-network
+            val supportMingw = project.name != "rsocket-transport-ktor" && project.name != "rsocket-transport-ktor-client"
+
             //native targets configuration
             if (idea) {
                 //if using idea, use only one native target same as host, DON'T PUBLISH FROM IDEA!!!
-                val os = System.getProperty("os.name")
                 when {
-                    os == "Linux"            -> linuxX64("native")
-                    os.startsWith("Windows") -> mingwX64("native")
-                    os.startsWith("Mac")     -> macosX64("native")
+                    HostManager.hostIsLinux                 -> linuxX64("native")
+                    HostManager.hostIsMingw && supportMingw -> mingwX64("native")
+                    HostManager.hostIsMac                   -> macosX64("native")
                 }
             } else {
-                val nativeTargets = mutableListOf(
-                    linuxX64(), macosX64(),
+                val hostTargets =
+                    listOf(linuxX64(), macosX64()) + if (supportMingw) listOf(mingwX64()) else emptyList()
+
+                val nativeTargets = hostTargets + listOf(
                     iosArm32(), iosArm64(), iosX64(),
                     watchosArm32(), watchosArm64(), watchosX86(),
                     tvosArm64(), tvosX64()
                 )
-
-                //windows target isn't supported by ktor-network
-                if (project.name != "rsocket-transport-ktor" && project.name != "rsocket-transport-ktor-client") nativeTargets += mingwX64()
 
                 val nativeMain by sourceSets.creating {
                     dependsOn(sourceSets["commonMain"])
@@ -139,6 +141,17 @@ subprojects {
                 nativeTargets.forEach {
                     sourceSets["${it.name}Main"].dependsOn(nativeMain)
                     sourceSets["${it.name}Test"].dependsOn(nativeTest)
+                }
+
+                //disable cross compilation
+                when {
+                    HostManager.hostIsLinux                 -> hostTargets - linuxX64()
+                    HostManager.hostIsMingw && supportMingw -> hostTargets - mingwX64()
+                    HostManager.hostIsMac                   -> hostTargets - macosX64()
+                    else                                    -> hostTargets
+                }.forEach {
+                    it.compilations.all { compileKotlinTask.enabled = false }
+                    it.binaries.all { linkTask.enabled = false }
                 }
             }
 
@@ -260,6 +273,7 @@ if (bintrayUser != null && bintrayKey != null) {
                         setProperty("password", bintrayKey)
                         setProperty("maven", true)
                     })
+                    println("Artifactory: ${publicationNames.contentToString()}")
                     defaults(delegateClosureOf<groovy.lang.GroovyObject> {
                         invokeMethod("publications", publicationNames)
                     })
@@ -283,6 +297,7 @@ if (bintrayUser != null && bintrayKey != null) {
                 extensions.configure<BintrayExtension> {
                     user = bintrayUser
                     key = bintrayKey
+                    println("Bintray: ${publicationNames.contentToString()}")
                     setPublications(*publicationNames)
 
                     publish = true
