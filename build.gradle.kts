@@ -56,7 +56,8 @@ allprojects {
 
 val idea = System.getProperty("idea.active") == "true"
 
-val isMainHost = System.getProperty("isMainHost") == "true"
+val isMainHost: String? by project
+val isMainHostBool: Boolean = isMainHost == "true"
 
 val Project.publicationNames: Array<String>
     get() {
@@ -64,8 +65,8 @@ val Project.publicationNames: Array<String>
         val all = publishing.publications.names
         //publish js, jvm, metadata and kotlinMultiplatform only once
         return when {
-            isMainHost -> all
-            else       -> all - "js" - "jvm" - "metadata" - "kotlinMultiplatform" - "linuxX64"
+            isMainHostBool -> all
+            else           -> all - "js" - "jvm" - "metadata" - "kotlinMultiplatform" - "linuxX64"
         }.toTypedArray()
     }
 
@@ -80,7 +81,7 @@ subprojects {
                 }
                 testRuns.all {
                     executionTask.configure {
-                        enabled = isMainHost
+                        enabled = isMainHostBool
                         jvmArgs("-Xmx4g", "-XX:+UseParallelGC")
                     }
                 }
@@ -93,7 +94,7 @@ subprojects {
                 //configure running tests for JS
                 nodejs {
                     testTask {
-                        enabled = isMainHost
+                        enabled = isMainHostBool
                         useMocha {
                             timeout = "600s"
                         }
@@ -101,7 +102,7 @@ subprojects {
                 }
                 browser {
                     testTask {
-                        enabled = isMainHost
+                        enabled = isMainHostBool
                         useKarma {
                             useConfigDirectory(rootDir.resolve("js").resolve("karma.config.d"))
                             useChromeHeadless()
@@ -126,9 +127,9 @@ subprojects {
                     listOf(linuxX64(), macosX64()) + if (supportMingw) listOf(mingwX64()) else emptyList()
 
                 val nativeTargets = hostTargets + listOf(
-                    iosArm32(), iosArm64(), iosX64(),
-                    watchosArm32(), watchosArm64(), watchosX86(),
-                    tvosArm64(), tvosX64()
+                    iosArm32(), iosArm64(), iosX64()
+//                    watchosArm32(), watchosArm64(), watchosX86(),
+//                    tvosArm64(), tvosX64()
                 )
 
                 val nativeMain by sourceSets.creating {
