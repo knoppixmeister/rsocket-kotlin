@@ -67,4 +67,4 @@ jobs:
         run: echo "##[set-env name=BRANCH_NAME;]$(echo ${GITHUB_REF#refs/heads/})"
       - uses: eskatos/gradle-command-action@v1
         with:
-          arguments: artifactoryPublish -PisMainHost="${{ matrix.isMainHost }}" -PbintrayUser="${{ secrets.bintrayUser }}" -PbintrayKey="${{ secrets.bintrayKey }}" -PversionSuffix="-${{ BRANCH_NAME }}-SNAPSHOT" -PbuildNumber="${{ github.run_number }}" --stacktrace --no-daemon
+          arguments: artifactoryPublish -PisMainHost="${{ matrix.isMainHost }}" -PbintrayUser="${{ secrets.bintrayUser }}" -PbintrayKey="${{ secrets.bintrayKey }}" -PversionSuffix="-${{ env.BRANCH_NAME }}-SNAPSHOT" -PbuildNumber="${{ github.run_number }}" --stacktrace --no-daemon
