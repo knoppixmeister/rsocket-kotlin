@@ -4,27 +4,31 @@ on: [pull_request]
 
 jobs:
   build:
-
-    runs-on: ubuntu-20.04
-
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        jdk: [ 1.8, 11, 14 ]
+        os: [ ubuntu-20.04, macos-latest, windows-latest ]
+        include:
+          - os: ubuntu-20.04
+            isMainHost: true #run jvm and js tests only on ubuntu
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK ${{ matrix.jdk }}
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.jdk }}
+          java-version: 11
       - name: Cache Gradle packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          path: |
+            ~/.gradle/caches/modules-2
+            build/js
+            ~/.konan
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.*') }} #hash based on *.gradle.kts and *.gradle.properties
           restore-keys: ${{ runner.os }}-gradle
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew clean build
+      - uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: build -PisMainHost=${{ matrix.isMainHost }} --scan --no-daemon
+

@@ -108,7 +108,7 @@ abstract class TransportTest : SuspendTest {
         assertEquals(200_000, list.size)
     }
 
-//    @Test
+    @Test
     fun requestChannel256x512() = test {
         val request = flow {
             repeat(512) {

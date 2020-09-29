@@ -35,7 +35,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - uses: eskatos/gradle-command-action@v1
         with:
-          arguments: build -PisMainHost=${{ matrix.isMainHost }} --info --scan --no-daemon
+          arguments: build -PisMainHost=${{ matrix.isMainHost }} --scan --no-daemon
 
   publish:
     needs: build
