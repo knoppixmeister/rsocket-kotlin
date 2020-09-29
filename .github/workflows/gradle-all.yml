@@ -8,6 +8,20 @@ on:
       - master
 
 jobs:
+  branch:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, macos-latest, windows-latest ]
+      fail-fast: false
+    steps:
+      - if: ${{ matrix.os == 'windows-latest' }}
+        run: echo ("::set-env name=BRANCH_NAME::" + $env:GITHUB_REF.replace('refs/heads/', ''))
+      - if: ${{ matrix.os != 'windows-latest' }}
+        run: echo "##[set-env name=BRANCH_NAME;]$(echo ${GITHUB_REF#refs/heads/})"
+      - name: Run on branch ${{ env.BRANCH_NAME }}
+      - run: echo 1
+
   build:
     runs-on: ${{ matrix.os }}
     strategy:
