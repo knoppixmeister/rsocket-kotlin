@@ -57,7 +57,7 @@ allprojects {
 val idea = System.getProperty("idea.active") == "true"
 
 val isMainHost: String? by project
-val isMainHostBool: Boolean = isMainHost == "true"
+val isMainHostBool: Boolean = idea || isMainHost == "true"
 
 val Project.publicationNames: Array<String>
     get() {

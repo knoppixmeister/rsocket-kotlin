@@ -41,12 +41,6 @@ kotlin {
                 implementation(project(":rsocket-transport-local"))
             }
         }
-        val nativeMain by getting {
-            dependencies {
-                //TODO - for concurrent map, but it's internal, need to replace it
-                api("io.ktor:ktor-utils:$ktorVersion")
-            }
-        }
     }
 }
 
