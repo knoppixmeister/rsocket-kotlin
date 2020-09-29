@@ -33,10 +33,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.*') }} #hash based on *.gradle.kts and *.gradle.properties
           restore-keys: ${{ runner.os }}-gradle
       - uses: eskatos/gradle-command-action@v1
-        env:
-          isMainHost: ${{ matrix.isMainHost }}
         with:
-          arguments: -PisMainHost="${isMainHost}" build --info --scan --no-daemon
+          arguments: build -PisMainHost="${{ matrix.isMainHost }}" --info --scan --no-daemon
 
   publish:
     needs: build
@@ -68,10 +66,5 @@ jobs:
       - if: ${{ matrix.os != 'windows-latest' }}
         run: echo "##[set-env name=BRANCH_NAME;]$(echo ${GITHUB_REF#refs/heads/})"
       - uses: eskatos/gradle-command-action@v1
-        env:
-          isMainHost: ${{ matrix.isMainHost }}
-          bintrayUser: ${{ secrets.bintrayUser }}
-          bintrayKey: ${{ secrets.bintrayKey }}
-          buildNumber: ${{ github.run_number }}
         with:
-          arguments: -PisMainHost="${isMainHost}" -PbintrayUser="${bintrayUser}" -PbintrayKey="${bintrayKey}" -PversionSuffix="-${BRANCH_NAME}-SNAPSHOT" -PbuildNumber="${buildNumber}" artifactoryPublish --stacktrace --no-daemon
+          arguments: artifactoryPublish -PisMainHost="${{ matrix.isMainHost }}" -PbintrayUser="${{ secrets.bintrayUser }}" -PbintrayKey="${{ secrets.bintrayKey }}" -PversionSuffix="-${{ BRANCH_NAME }}-SNAPSHOT" -PbuildNumber="${{ github.run_number }}" --stacktrace --no-daemon
