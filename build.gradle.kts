@@ -59,6 +59,8 @@ val idea = System.getProperty("idea.active") == "true"
 val isMainHost: String? by project
 val isMainHostBool: Boolean = isMainHost == "true"
 
+println("SETUP HOST: $isMainHost, $isMainHostBool")
+
 val Project.publicationNames: Array<String>
     get() {
         val publishing: PublishingExtension by extensions

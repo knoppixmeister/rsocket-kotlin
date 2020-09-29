@@ -36,7 +36,7 @@ jobs:
         env:
           isMainHost: ${{ matrix.isMainHost }}
         with:
-          arguments: -PisMainHost="${isMainHost}" build --scan --no-daemon
+          arguments: -PisMainHost="${isMainHost}" build --info --scan --no-daemon
 
   publish:
     needs: build
