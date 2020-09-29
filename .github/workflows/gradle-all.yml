@@ -25,7 +25,7 @@ jobs:
         with:
           java-version: 11
       - name: Cache Gradle packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
@@ -54,7 +54,7 @@ jobs:
         with:
           java-version: 11
       - name: Cache Gradle packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
